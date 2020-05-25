@@ -3,8 +3,14 @@ import './App.css';
 
 class App extends Component {
   state = {
-    monsters: [{ name: 'Saurabh' }, { name: 'Ravi' }, { name: 'Shubham' }],
+    monsters: [],
   };
+  //LifeCycle Method that gets called when component gets rendered
+  async componentDidMount() {
+    const res = await fetch('https://jsonplaceholder.typicode.com/users');
+    const data = await res.json();
+    this.setState({ monsters: data });
+  }
   render() {
     return (
       <div className='App'>
