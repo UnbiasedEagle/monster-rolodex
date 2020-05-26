@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
+import CardList from './components/card-list/card-list';
+import SearchBox from './components/search-box/search-box';
 
 class App extends Component {
   state = {
     monsters: [],
+    searchField: '',
   };
   //LifeCycle Method that gets called when component gets rendered
   async componentDidMount() {
@@ -11,12 +14,24 @@ class App extends Component {
     const data = await res.json();
     this.setState({ monsters: data });
   }
+  searchMonsterHandler = (e) => {
+    this.setState({
+      searchField: e.target.value,
+    });
+  };
   render() {
+    const { monsters, searchField } = this.state;
+    const filteredMonster = monsters.filter((monster) => {
+      return monster.name.toLowerCase().includes(searchField.toLowerCase());
+    });
     return (
       <div className='App'>
-        {this.state.monsters.map((monster, index) => {
-          return <h1 key={index}>{monster.name}</h1>;
-        })}
+        <h1>Monster Rolodex</h1>
+        <SearchBox
+          handleChange={this.searchMonsterHandler}
+          placeholder={'search monsters'}
+        ></SearchBox>
+        <CardList monsters={filteredMonster}></CardList>
       </div>
     );
   }
